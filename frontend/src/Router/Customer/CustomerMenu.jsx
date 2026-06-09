@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { addToCart } from '../../store/slices/cartSlice'
+import { addToast } from '../../store/slices/toastSlice'
 import {
   fetchMenuItems,
   fetchCategories,
@@ -8,8 +9,9 @@ import {
   setCategoryFilter
 } from '../../store/slices/menuSlice'
 
-import { useSearchParams } from 'react-router-dom'
+import { useSearchParams, useNavigate } from 'react-router-dom'
 import tableService from '../../services/tableService'
+import { Search, Filter, Plus, Minus } from 'lucide-react'
 
 const CustomerMenu = () => {
   const dispatch = useDispatch()
@@ -79,15 +81,19 @@ const CustomerMenu = () => {
 
   const handleAddToCart = (item) => {
     if (!item.availability && item.availability !== undefined) {
-      alert('Item is currently unavailable')
+      dispatch(addToast({
+        message: 'Item is currently unavailable',
+        type: 'warning'
+      }))
       return
     }
 
     const id = item.id || item._id
     dispatch(addToCart({ id, name: item.name, price: item.price, quantity: 1 }))
-    // optionally show a toast - for now a small confirmation
-    // eslint-disable-next-line no-undef
-    try { window.alert(`${item.name} added to cart`) } catch (_) { }
+    dispatch(addToast({
+      message: `${item.name} added to cart`,
+      type: 'success'
+    }))
   }
 
   if (loading || tableLoading) {
@@ -158,22 +164,22 @@ const CustomerMenu = () => {
   return (
     <div className="p-6">
       {table && (
-      <div className="bg-orange-100 border border-orange-200 rounded-lg p-4 mb-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <h2 className="text-lg font-semibold text-orange-900">
-              🍽️ Table {table.number}
-            </h2>
-            <p className="text-sm text-orange-700">
-              Your orders will be associated with this table
-            </p>
-          </div>
-          <div className="bg-green-100 px-4 py-2 rounded-full">
-            <span className="text-green-800 font-semibold text-sm">✓ Available</span>
+        <div className="bg-orange-100 border border-orange-200 rounded-lg p-4 mb-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-lg font-semibold text-orange-900">
+                🍽️ Table {table.number}
+              </h2>
+              <p className="text-sm text-orange-700">
+                Your orders will be associated with this table
+              </p>
+            </div>
+            <div className="bg-green-100 px-4 py-2 rounded-full">
+              <span className="text-green-800 font-semibold text-sm">✓ Available</span>
+            </div>
           </div>
         </div>
-      </div>
-    )}
+      )}
       <div className="text-center mb-8 bg-white rounded-lg shadow-lg p-8 border border-transparent">
         <h1 className="text-4xl font-bold mb-2 text-gray-800">Menu</h1>
         <p className="text-lg font-medium text-gray-600">Savor the Flavors: Discover Your Next Favorite Dish!</p>
@@ -182,23 +188,26 @@ const CustomerMenu = () => {
       {/* Search Bar */}
       <div className="mb-8">
         <div className="max-w-md mx-auto relative">
-          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
+          <div className="relative flex items-center">
+            <input
+              value={search}
+              onChange={handleSearch}
+              onKeyPress={(e) => e.key === 'Enter' && applyFilters()}
+              placeholder="Search for delicious dishes"
+              className="w-full h-10 pl-10 pr-10 text-sm border border-gray-200 rounded-full bg-gray-50 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            />
+            <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
+              <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </div>
+            <button
+              onClick={applyFilters}
+              className="absolute right-2 top-1/2 transform -translate-y-1/2 text-blue-500 font-medium text-sm"
+            >
+              Search
+            </button>
           </div>
-          <input
-            value={search}
-            onChange={handleSearch}
-            placeholder="Search for delicious dishes..."
-            className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-full shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
-          />
-          <button
-            onClick={applyFilters}
-            className="absolute inset-y-0 right-0 pr-3 flex items-center"
-          >
-            <span className="text-blue-600 hover:text-blue-800 font-medium">Search</span>
-          </button>
         </div>
       </div>
 

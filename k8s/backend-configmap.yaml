@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+
+metadata:
+  name: backend-config
+
+data:
+  MONGO_URI: mongodb://mongodb:27017/restaurantdb
+  PORT: "5000"

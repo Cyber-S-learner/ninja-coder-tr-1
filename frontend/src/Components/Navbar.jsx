@@ -50,7 +50,7 @@ const Navbar = () => {
                   className={`text-gray-700 hover:text-amber-600 px-3 py-2 text-sm font-medium transition-colors relative ${location.pathname === '/customer/menu' ? 'text-amber-600 after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-amber-600' : ''
                     }`}
                 >
-                  Menu
+                  Res Menu 
                 </Link>
                 <Link
                   to="/customer/cart"

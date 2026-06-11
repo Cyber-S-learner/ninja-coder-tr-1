@@ -1,7 +1,10 @@
 // Use VITE_API_URL when provided, otherwise fall back to localhost backend
-const DEFAULT_API = 'http://localhost:5000'
-const API_BASE = import.meta.env.VITE_API_URL || DEFAULT_API
-const API_URL = `${API_BASE}/api/orders`
+const DEFAULT_API = 'http://localhost:5000';
+
+const API_BASE =
+  import.meta.env.VITE_API_URL || DEFAULT_API;
+
+const API_URL = `${API_BASE}/api/orders`;
 
 if (!import.meta.env.VITE_API_URL) {
   console.warn('[orderService] VITE_API_URL is not defined. Falling back to', DEFAULT_API);

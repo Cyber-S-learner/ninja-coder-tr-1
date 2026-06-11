@@ -1,4 +1,9 @@
-const API_URL = `${import.meta.env.VITE_API_URL}/api/tables`;
+const DEFAULT_API = 'http://localhost:5000';
+
+const API_BASE =
+  import.meta.env.VITE_API_URL || DEFAULT_API;
+
+const API_URL = `${API_BASE}/api/tables`;
 
 class TableService {
   // Get table by QR slug (public)

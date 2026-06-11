@@ -258,6 +258,6 @@ Through this project I learned:
 * Production cloud deployment (AWS/GCP/Azure)
 
 
-![Project Screenshot](images\Screenshot 2026-06-12 000143.png)
+![Project Screenshot](images/Screensho2026-06-12000230.png)
 
-![Project Screenshot](images\Screenshot 2026-06-12 000230.png)
+![Project Screenshot](images/Screenshot%202026-06-12%20000143.png)
